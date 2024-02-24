@@ -21,21 +21,7 @@ class IMUSerialReader(Node):
         # while not self.cli.wait_for_service(timeout_sec=1.0):
         #     self.get_logger().info('service not available, waiting again...')                              
 
-        self.gx_offset = 0.050949999999999364
-        self.gy_offset = -0.0416299999999994
-        self.gz_offset = -0.0499899999999993
-
-        self.ax_offset = 0.045919999999999614
-        self.ay_offset = 0.2553499999999982
-        self.az_offset = 9.764280000000126
-
         self.isCalibrated = False
-
-
-        # [INFO] [1707379980.026784490] [imu_calibration_node]: Calibration complete: 
-        # GX offset: 2.0350999999999995, 
-        # GY offset: 0.051550000000000006, 
-        # GZ offset: -1.6954200000000001
 
         calibration_gen_path = get_package_share_directory('calibration_gen')
         self.path = os.path.join(calibration_gen_path, 'config', 'sensor_calibration.yaml')
