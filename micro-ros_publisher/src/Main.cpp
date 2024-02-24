@@ -14,7 +14,7 @@
 #include <MPU9250.h>
 
 #define DirectionPin 4 // Define pin for motor direction
-#define BaudRate 115200 // Define baud rate for serial communication
+#define BaudRate 115200 // Define baud rate for serial commkgmmmunication
 
 rcl_publisher_t wheel_publisher;
 rcl_publisher_t imu_publisher;
@@ -140,12 +140,13 @@ void loop0(void* pvParameters)
       Motor.turnWheel(1, LEFT, round((0.916 * dir[0] * 1024) + (gain * fabs(speed[0]))));
       Motor.turnWheel(2, LEFT, round((0.916 * dir[1] * 1024) + (gain * fabs(speed[1]))));
 
-      for (int i = 0; i < 2; i++)
-      {
-        int motor_speed = Motor.readSpeed(i + 1);
-        if (motor_speed >= 1024) wheel_speed[i] = 0.916 * (motor_speed - 1024) / gain;
-        else if (motor_speed >= 0) wheel_speed[i] = 0.916 * motor_speed / gain;
-      }
+      int motor_speed = Motor.readSpeed(1);
+      if (motor_speed >= 1024 && motor_speed <= 2047) wheel_speed[0] = 0.916 * (1024 - motor_speed) / gain;
+      else if (motor_speed >= 0 && motor_speed <= 1023) wheel_speed[0] = 0.916 * motor_speed / gain;
+
+      motor_speed = Motor.readSpeed(2);
+      if (motor_speed >= 1024 && motor_speed <= 2047) wheel_speed[1] = 0.916 * (motor_speed - 1024) / gain;
+      else if (motor_speed >= 0 && motor_speed <= 1023) wheel_speed[1] = 0.916 * motor_speed / gain;
 
       xSemaphoreGive(wheel_sem);
     }
@@ -238,7 +239,7 @@ void setup() {
   // Configure serial transport
   Serial.begin(115200);
 
-  DiffDrive_IK_Init(&kin, 67.5 / (2.0 * 1000.0), 169.0 / (2.0 * 1000.0));
+  DiffDrive_IK_Init(&kin, 67.5 / (2.0 * 1000.0), 162.5 / (2.0 * 1000.0));
 
   imu_sem = xSemaphoreCreateBinary();
   wheel_sem = xSemaphoreCreateBinary();
