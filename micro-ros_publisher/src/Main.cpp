@@ -14,7 +14,7 @@
 #include <MPU9250.h>
 
 #define DirectionPin 4 // Define pin for motor direction
-#define BaudRate 115200 // Define baud rate for serial communication
+#define BaudRate 115200 // Define baud rate for serial commkgmmmunication
 
 rcl_publisher_t wheel_publisher;
 rcl_publisher_t imu_publisher;
@@ -238,7 +238,7 @@ void setup() {
   // Configure serial transport
   Serial.begin(115200);
 
-  DiffDrive_IK_Init(&kin, 67.5 / (2.0 * 1000.0), 169.0 / (2.0 * 1000.0));
+  DiffDrive_IK_Init(&kin, 67.5 / (2.0 * 1000.0), 162.5 / (2.0 * 1000.0));
 
   imu_sem = xSemaphoreCreateBinary();
   wheel_sem = xSemaphoreCreateBinary();
