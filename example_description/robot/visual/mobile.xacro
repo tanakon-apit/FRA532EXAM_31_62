@@ -44,7 +44,7 @@
         <joint name="left_wheel" type="revolute">
             <parent link="base_link"/>
             <child link="left_wheel"/>
-            <origin xyz="0 0.0845 -0.024" rpy="0 0 0"/>
+            <origin xyz="0 0.08125 -0.024" rpy="0 0 0"/>
             <axis xyz="0 1 0"/>
             <limit 
                 lower="-3.1459" 
@@ -56,7 +56,7 @@
         <joint name="right_wheel" type="revolute">
             <parent link="base_link"/>
             <child link="right_wheel"/>
-            <origin xyz="0 -0.0845 -0.024" rpy="0 0 0"/>
+            <origin xyz="0 -0.08125 -0.024" rpy="0 0 0"/>
             <axis xyz="0 1 0"/>
             <limit 
                 lower="-3.1459" 

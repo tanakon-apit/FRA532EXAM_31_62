@@ -24,12 +24,13 @@ class CalibrationSensor(Node):
         self.collected_acc_data = []
 
         self.n = 0
-        self.num = 1000
+        self.num = 2000
 
         self.isCalibrated = False
 
         calibration_gen_path = get_package_share_directory('calibration_gen')
-        self.path = os.path.join(calibration_gen_path, 'config', 'sensor_calibration.yaml')
+        print(calibration_gen_path)
+        self.path = os.path.join('/home/tuchapong1234/FRA532EXAM_WS/', 'config', 'sensor_calibration.yaml')
 
     def timer_callback(self):
         pass
@@ -40,7 +41,6 @@ class CalibrationSensor(Node):
     #     else:
     #         response.result = False
     #     return response
-
 
     def save_calibration(self, mean, cov, name):
         
@@ -90,34 +90,7 @@ class CalibrationSensor(Node):
                 print(offset_gyro)
                 print(cov_gyro)
                 self.isCalibrated = True
-        
-    def sensor_data_callback(self, msg):
-        if self.n < self.num and self.isCalibrated == False:
-            self.n = self.n + 1
-            self.collected_data.append(msg.data)
-            print("collect data: " + str(self.n)) 
-        else:
-            if self.isCalibrated == False:
-                data_array = np.array(self.collected_data)
-                mean = np.mean(data_array, 0).tolist()
-                cov = np.cov(data_array.T)
-                cov_list = cov.tolist()
-
-                with open(self.path, 'r') as file:
-                    value = yaml.safe_load(file)
-                
-                value['mean'] = mean
-                value['covariance'] = cov_list
-
-                with open(self.path, 'w') as file:
-                    yaml.dump(value, file)
-
-                with open(self.path, 'r') as file:
-                    value = yaml.safe_load(file)
-
-                print("Calibrated", value)
-
-                self.isCalibrated = True
+                exit()
             
     
 def main(args=None):

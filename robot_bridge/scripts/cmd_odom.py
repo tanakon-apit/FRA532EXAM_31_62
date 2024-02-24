@@ -13,12 +13,12 @@ class CommandOdomNode(Node):
     def __init__(self):
         super().__init__('Command_Odom')
         self.create_subscription(Twist, "/command", self.cmd_callback, 10)
-        # self.cmd_vel_pub = self.create_publisher(Twist, "cmd_vel", 10)
+        self.cmd_vel_pub = self.create_publisher(Twist, "cmd_vel", 10)
         self.cmd_pub = self.create_publisher(Odometry, "cmd", 10)
         # self.pub_odom = self.create_publisher(Odometry, "/odom", 10)
         self.pub_tf_br = TransformBroadcaster(self)
 
-        self.time_step = 0.1
+        self.time_step = 0.033
         self.create_timer(self.time_step, self.timer_callback)
 
         self.cmd_vel = [0.0, 0.0]
@@ -28,7 +28,7 @@ class CommandOdomNode(Node):
     
     def cmd_callback(self, msg):
         self.cmd_vel = [msg.linear.x, msg.angular.z]
-        # self.cmd_vel_pub.publish(msg)
+        self.cmd_vel_pub.publish(msg)
 
     def integrate(self, dt, cmd_vel, pos):
         vx = cmd_vel[0] * math.cos(cmd_vel[1])
