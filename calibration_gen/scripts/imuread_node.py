@@ -5,8 +5,10 @@ from std_msgs.msg import String, Bool
 import serial
 import serial.tools.list_ports
 from sensor_msgs.msg import Imu
+from geometry_msgs.msg import Quaternion
 import numpy as np
 from ament_index_python import get_package_share_directory
+from tf_transformations import quaternion_from_euler
 import os
 import sys, yaml
 
@@ -22,37 +24,47 @@ class IMUSerialReader(Node):
         #     self.get_logger().info('service not available, waiting again...')                              
 
         self.isCalibrated = False
-
+        
         calibration_gen_path = get_package_share_directory('calibration_gen')
-        self.path = os.path.join(calibration_gen_path, 'config', 'sensor_calibration.yaml')
-
-
-    def imu_data_callback(self, msg):
-
+        self.path = os.path.join('/home/tuchapong1234/FRA532EXAM_WS', 'config', 'sensor_calibration.yaml')
         with open(self.path, 'r') as file:
-            value = yaml.safe_load(file)
+            self.value = yaml.safe_load(file)
 
+        self.imu_msg_cal = Imu()
+        cov_gyro_np = np.array(self.value['cov gyro'])
+        # self.imu_msg_cal .angular_velocity_covariance = cov_gyro_np.flatten()
+        cov_acc_np = np.array(self.value['cov acc'])
+        self.imu_msg_cal .linear_acceleration_covariance = cov_acc_np.flatten()
+
+        self.quat = quaternion_from_euler(0.0, 0.0, 0.0)
+        self.lasttimestamp = self.get_clock().now()
+
+        self.angle = 0.0
+    
+    def imu_data_callback(self, msg : Imu):
+        
+        currenttimestamp = self.get_clock().now()
+        dt = (currenttimestamp - self.lasttimestamp).to_msg().nanosec * 1.0e-9
+        self.lasttimestamp = currenttimestamp
         # if self.isCalibrated == True:
-        imu_msg_cal = Imu()
-        imu_msg_cal.header.stamp = self.get_clock().now().to_msg()
-        imu_msg_cal.header.frame_id = "imu_link"  # Adjust as needed
+        self.imu_msg_cal .header.stamp = self.get_clock().now().to_msg()
+        self.imu_msg_cal .header.frame_id = "imu"  # Adjust as needed
         # Gyroscope data in rad/s
-        imu_msg_cal.angular_velocity.x = msg.angular_velocity.x - value['offset gyro'][0]
-        imu_msg_cal.angular_velocity.y = msg.angular_velocity.y - value['offset gyro'][1]
-        imu_msg_cal.angular_velocity.z = msg.angular_velocity.z - value['offset gyro'][2]
-        cov_gyro_np = np.array(value['cov gyro'])
-        imu_msg_cal.angular_velocity_covariance = cov_gyro_np.flatten()
+        self.imu_msg_cal .angular_velocity.x = msg.angular_velocity.x - self.value['offset gyro'][0]
+        self.imu_msg_cal .angular_velocity.y = msg.angular_velocity.y - self.value['offset gyro'][1]
+        self.imu_msg_cal .angular_velocity.z = msg.angular_velocity.z - self.value['offset gyro'][2]
         
         # Accelerometer data in m/s^2
-        imu_msg_cal.linear_acceleration.x = msg.linear_acceleration.x - value['offset acc'][0]
-        imu_msg_cal.linear_acceleration.y = msg.linear_acceleration.y - value['offset acc'][1]
-        imu_msg_cal.linear_acceleration.z = msg.linear_acceleration.z - value['offset acc'][2]
-        cov_acc_np = np.array(value['cov acc'])
-        imu_msg_cal.linear_acceleration_covariance = cov_acc_np.flatten()
+        self.imu_msg_cal .linear_acceleration.x = msg.linear_acceleration.x - self.value['offset acc'][0]
+        self.imu_msg_cal .linear_acceleration.y = msg.linear_acceleration.y - self.value['offset acc'][1]
+        self.imu_msg_cal .linear_acceleration.z = msg.linear_acceleration.z - self.value['offset acc'][2]
 
-        print(imu_msg_cal)
+        self.angle += self.imu_msg_cal.angular_velocity.z * dt
+        self.quat = quaternion_from_euler(0.0, 0.0, self.angle)
+        self.imu_msg_cal.orientation = Quaternion(x=self.quat[0], y=self.quat[1], z=self.quat[2], w=self.quat[3])
 
-        self.publisher_imu_cal.publish(imu_msg_cal)
+        print(self.imu_msg_cal )
+        self.publisher_imu_cal.publish(self.imu_msg_cal )
 
 
 def main(args=None):
