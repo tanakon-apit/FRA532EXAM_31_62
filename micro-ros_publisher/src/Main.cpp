@@ -143,7 +143,7 @@ void loop0(void* pvParameters)
       for (int i = 0; i < 2; i++)
       {
         int motor_speed = Motor.readSpeed(i + 1);
-        if (motor_speed >= 1024) wheel_speed[i] = 0.916 * (motor_speed - 1024) / gain;
+        if (motor_speed >= 1024) wheel_speed[i] = -0.916 * (motor_speed - 1024) / gain;
         else if (motor_speed >= 0) wheel_speed[i] = 0.916 * motor_speed / gain;
       }
 
