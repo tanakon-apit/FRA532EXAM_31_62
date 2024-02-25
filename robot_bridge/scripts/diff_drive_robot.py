@@ -21,13 +21,12 @@ class DiffDriveRobot(Node):
         self.create_timer(0.033, self.timer_callback)
 
         self.Kine = Diff_Drive_Kinematic(r=0.03375, b=0.1625)
-        self.Cov = Diff_Drive_Cov_Estimator(kr=1.0e-3, kl=1.0e-3)
+        self.Cov = Diff_Drive_Cov_Estimator(kr=1.0e-3, kl=1.0e-3, r=0.03375, b=0.1625)
         self.qd = np.zeros(2)
         self.pose = np.zeros(3)
         self.twist = np.zeros(2)
         self.quat = quaternion_from_euler(0.0, 0.0, self.pose[2])
         self.lasttimestamp = self.get_clock().now()
-        self.r = 0.03375
 
         self.twist_cov = np.array([1.0e-9, 0.0, 0.0, 0.0, 0.0, 0.0,
                                    0.0, 1.0e-9, 0.0, 0.0, 0.0, 0.0,
@@ -48,11 +47,8 @@ class DiffDriveRobot(Node):
         currenttimestamp = self.get_clock().now()
         dt = (currenttimestamp - self.lasttimestamp).to_msg().nanosec * 1.0e-9
         self.lasttimestamp = currenttimestamp
-        # update odometry
-        self.pose = self.Kine.get_pose(dt=dt, qd=self.qd)
-        self.twist = self.Kine.get_twist(qd=self.qd)
         # update covariance
-        cov = self.Cov.update_cov(theta=self.pose[2], dsr=self.qd[1]*dt*self.r, dsl=self.qd[0]*dt*self.r)
+        cov = self.Cov.update_cov(theta=self.pose[2], dqr=self.qd[1]*dt*self.r, dql=self.qd[0]*dt)
         self.pose_cov[0] = cov[0][0]
         self.pose_cov[1] = cov[0][1]
         self.pose_cov[5] = cov[0][2]
@@ -62,6 +58,9 @@ class DiffDriveRobot(Node):
         self.pose_cov[30] = cov[2][0]
         self.pose_cov[31] = cov[2][1]
         self.pose_cov[35] = cov[2][2]
+        # update odometry
+        self.pose = self.Kine.get_pose(dt=dt, qd=self.qd)
+        self.twist = self.Kine.get_twist(qd=self.qd)
         # calculate quaternion angle
         self.quat = quaternion_from_euler(0.0, 0.0, self.pose[2])
         # publish odometry and transformation
