@@ -86,9 +86,9 @@ ekf_filter_node:
         # has no pose information, so the first six values would be meaningless in that case. Each vector defaults to all false
         # if unspecified, effectively making this parameter required for each sensor.
         odom0_config: [false,  false,  false,
-                       false, false, true,
-                       true, true, false,
                        false, false, false,
+                       true, true, false,
+                       false, false, true,
                        false, false, false]
 
         # If you have high-frequency data or are running with a low frequency parameter value, then you may want to increase
@@ -124,8 +124,8 @@ ekf_filter_node:
         # required. Data is specified at the level of pose and twist variables, rather than for each variable in isolation.
         # For messages that have both pose and twist data, the parameter specifies to which part of the message we are applying
         # the thresholds.
-        odom0_pose_rejection_threshold: 5.0
-        odom0_twist_rejection_threshold: 1.0
+        # odom0_pose_rejection_threshold: 5.0
+        # odom0_twist_rejection_threshold: 1.0
 
         # Further input parameter examples
         # odom1: example/odom2
@@ -164,14 +164,14 @@ ekf_filter_node:
                       false,  false,  false,
                       false, false, false,
                       false,  false,  true,
-                      false,  false,  false]
+                      true,  true,  false]
 
         imu0_differential: false
         imu0_relative: true
         imu0_queue_size: 5
-        imu0_pose_rejection_threshold: 0.8               # Note the difference in parameter names
-        imu0_twist_rejection_threshold: 20.0                #
-        imu0_linear_acceleration_rejection_threshold: 0.8  #
+        # imu0_pose_rejection_threshold: 0.8               # Note the difference in parameter names
+        # imu0_twist_rejection_threshold: 20.0                #
+        # imu0_linear_acceleration_rejection_threshold: 0.8  #
 
         # [ADVANCED] Some IMUs automatically remove acceleration due to gravity, and others don't. If yours doesn't, please set
         # this to true, and *make sure* your data conforms to REP-103, specifically, that the data is in ENU frame.

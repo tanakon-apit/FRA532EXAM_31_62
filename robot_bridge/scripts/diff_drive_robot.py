@@ -26,8 +26,19 @@ class DiffDriveRobot(Node):
         self.quat = quaternion_from_euler(0.0, 0.0, self.pose[2])
         self.lasttimestamp = self.get_clock().now()
 
-        self.twist_cov = (np.eye(6) * 1.0e-3).flatten()
-        self.pose_cov = (np.eye(6) * 1.0e3).flatten()
+        self.twist_cov = np.array([1.0e-3, 1.0e-3, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 1.0e-3, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 1.0e-6, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 1.0e-3, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 1.0e-3, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 0.0, 1.0e-1])
+        
+        self.pose_cov = np.array([1.0e-3, 1.0e-3, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 1.0e-3, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 1.0e-6, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 1.0e-3, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 1.0e-3, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 0.0, 1.0e-1])
 
         #Test Wheel odom
         # self.create_subscription(Twist, "/command", self.cmd_callback, 10)

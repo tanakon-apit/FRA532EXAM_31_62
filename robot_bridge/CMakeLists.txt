@@ -29,6 +29,7 @@ ament_python_install_package(${PROJECT_NAME})
 install(PROGRAMS
   scripts/dummy_script.py
   scripts/diff_drive_robot.py
+  scripts/cmd_odom.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -49,6 +50,9 @@ install(TARGETS
 ################ INSTALL LAUNCH, ETC #################
 install(DIRECTORY
   # add directories here
+  launch
+  scripts
+  robot_bridge
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()

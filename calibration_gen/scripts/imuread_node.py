@@ -25,8 +25,7 @@ class IMUSerialReader(Node):
 
         self.isCalibrated = False
         
-        calibration_gen_path = get_package_share_directory('calibration_gen')
-        self.path = os.path.join('/home/tuchapong1234/FRA532EXAM_WS', 'config', 'sensor_calibration.yaml')
+        self.path = os.path.join('/home/tuchapong1234/FRA532EXAM_WS/src/calibration_gen', 'config', 'sensor_calibration.yaml')
         with open(self.path, 'r') as file:
             self.value = yaml.safe_load(file)
 
@@ -52,16 +51,12 @@ class IMUSerialReader(Node):
         # Gyroscope data in rad/s
         self.imu_msg_cal .angular_velocity.x = msg.angular_velocity.x - self.value['offset gyro'][0]
         self.imu_msg_cal .angular_velocity.y = msg.angular_velocity.y - self.value['offset gyro'][1]
-        self.imu_msg_cal .angular_velocity.z = msg.angular_velocity.z - self.value['offset gyro'][2]
+        self.imu_msg_cal .angular_velocity.z = np.round(msg.angular_velocity.z - self.value['offset gyro'][2], 2)
         
         # Accelerometer data in m/s^2
-        self.imu_msg_cal .linear_acceleration.x = msg.linear_acceleration.x - self.value['offset acc'][0]
-        self.imu_msg_cal .linear_acceleration.y = msg.linear_acceleration.y - self.value['offset acc'][1]
+        self.imu_msg_cal .linear_acceleration.x = np.round(msg.linear_acceleration.x - self.value['offset acc'][0])
+        self.imu_msg_cal .linear_acceleration.y = np.round(msg.linear_acceleration.y - self.value['offset acc'][1])
         self.imu_msg_cal .linear_acceleration.z = msg.linear_acceleration.z - self.value['offset acc'][2]
-
-        self.angle += self.imu_msg_cal.angular_velocity.z * dt
-        self.quat = quaternion_from_euler(0.0, 0.0, self.angle)
-        self.imu_msg_cal.orientation = Quaternion(x=self.quat[0], y=self.quat[1], z=self.quat[2], w=self.quat[3])
 
         print(self.imu_msg_cal )
         self.publisher_imu_cal.publish(self.imu_msg_cal )

@@ -28,9 +28,9 @@ class CalibrationSensor(Node):
 
         self.isCalibrated = False
 
-        calibration_gen_path = get_package_share_directory('calibration_gen')
-        print(calibration_gen_path)
-        self.path = os.path.join('/home/tuchapong1234/FRA532EXAM_WS/', 'config', 'sensor_calibration.yaml')
+        # calibration_gen_path = get_package_share_directory('calibration_gen')
+        # print(calibration_gen_path)
+        self.path = os.path.join('/home/tuchapong1234/FRA532EXAM_WS/src/calibration_gen', 'config', 'sensor_calibration.yaml')
 
     def timer_callback(self):
         pass
