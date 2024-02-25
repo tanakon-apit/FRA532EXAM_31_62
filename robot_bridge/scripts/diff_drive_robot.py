@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from lab1.mobile_kinematic import Diff_Drive_Kinematic
+from robot_bridge.mobile_kinematic import Diff_Drive_Kinematic
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float64MultiArray
@@ -26,7 +26,7 @@ class DiffDriveRobot(Node):
         self.quat = quaternion_from_euler(0.0, 0.0, self.pose[2])
         self.lasttimestamp = self.get_clock().now()
 
-        self.twist_cov = np.array([1.0e-3, 1.0e-3, 0.0, 0.0, 0.0, 0.0,
+        self.twist_cov = np.array([1.0e-3, 0.0, 0.0, 0.0, 0.0, 0.0,
                                    0.0, 1.0e-3, 0.0, 0.0, 0.0, 0.0,
                                    0.0, 0.0, 1.0e-6, 0.0, 0.0, 0.0,
                                    0.0, 0.0, 0.0, 1.0e-3, 0.0, 0.0,
