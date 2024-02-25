@@ -140,13 +140,14 @@ void loop0(void* pvParameters)
       Motor.turnWheel(1, LEFT, round((0.916 * dir[0] * 1024) + (gain * fabs(speed[0]))));
       Motor.turnWheel(2, LEFT, round((0.916 * dir[1] * 1024) + (gain * fabs(speed[1]))));
 
-      int motor_speed = Motor.readSpeed(1);
-      if (motor_speed >= 1024 && motor_speed <= 2047) wheel_speed[0] = 0.916 * (1024 - motor_speed) / gain;
-      else if (motor_speed >= 0 && motor_speed <= 1023) wheel_speed[0] = 0.916 * motor_speed / gain;
+      int motor_speed;
+      motor_speed = Motor.readSpeed(1);
+      if (motor_speed >= 1024) wheel_speed[0] = 0.916 * (1024 - motor_speed) / gain;
+      else if (motor_speed >= 0) wheel_speed[0] = 0.916 * motor_speed / gain;
 
       motor_speed = Motor.readSpeed(2);
-      if (motor_speed >= 1024 && motor_speed <= 2047) wheel_speed[1] = 0.916 * (motor_speed - 1024) / gain;
-      else if (motor_speed >= 0 && motor_speed <= 1023) wheel_speed[1] = 0.916 * motor_speed / gain;
+      if (motor_speed >= 1024) wheel_speed[1] = 0.916 * (motor_speed - 1024) / gain;
+      else if (motor_speed >= 0) wheel_speed[1] = -0.916 * motor_speed / gain;
 
       xSemaphoreGive(wheel_sem);
     }
@@ -170,7 +171,7 @@ void loop1(void* pvParameters)
 {
 
   ///////////////////
-  IPAddress agent_ip(192,168,166,55);
+  IPAddress agent_ip(192,168,66,55);
   size_t agent_port = 8888;
 
   char ssid[] = "AndroidAP8A99";
@@ -178,6 +179,12 @@ void loop1(void* pvParameters)
   Serial.println("Initial Robot");
   set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
   delay(2000);
+
+  // char ssid[] = "Galaxy Note20 Ultra 5Gf04d";
+  // char psk[]= "0936742513";
+  // Serial.println("Initial Robot");
+  // set_microros_wifi_transports(ssid, psk, agent_ip, agent_port);
+  // delay(2000);
 
   allocator = rcl_get_default_allocator();
 
@@ -239,15 +246,15 @@ void setup() {
   // Configure serial transport
   Serial.begin(115200);
 
-  DiffDrive_IK_Init(&kin, 67.5 / (2.0 * 1000.0), 162.5 / (2.0 * 1000.0));
+  DiffDrive_IK_Init(&kin, 67.5 / (2.0 * 1000.0), 162.5 / (1000.0));
 
   imu_sem = xSemaphoreCreateBinary();
   wheel_sem = xSemaphoreCreateBinary();
   cmd_sem = xSemaphoreCreateBinary();
 
-  xTaskCreatePinnedToCore(loop0, "Task0", 10000, NULL, tskIDLE_PRIORITY, &task0, 0);
+  xTaskCreatePinnedToCore(loop0, "Task0", 10000, NULL, tskIDLE_PRIORITY, &task0, 1);
   delay(500);
-  xTaskCreatePinnedToCore(loop1, "Task1", 10000, NULL, tskIDLE_PRIORITY, &task1, 1);
+  xTaskCreatePinnedToCore(loop1, "Task1", 10000, NULL, tskIDLE_PRIORITY, &task1, 0);
   delay(500);
 
 }
