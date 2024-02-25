@@ -30,6 +30,8 @@ install(PROGRAMS
   scripts/dummy_script.py
   scripts/diff_drive_robot.py
   scripts/cmd_odom.py
+  robot_bridge/mobile_cob_estimator.py
+  robot_bridge/mobile_kinematic.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
