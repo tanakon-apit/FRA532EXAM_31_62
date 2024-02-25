@@ -73,13 +73,13 @@ class CalibrationSensor(Node):
             if self.isCalibrated == False:
                 data_acc_array = np.array(self.collected_acc_data)
                 offset_acc = np.mean(data_acc_array, 0)
-                cov_acc = np.cov(data_acc_array.T)
+                cov_acc = np.absolute(np.cov(data_acc_array.T))
 
                 self.save_calibration(offset_acc, cov_acc, 'acc')
 
                 data_gyro_array = np.array(self.collected_gyro_data)
                 offset_gyro = np.mean(data_gyro_array, 0)
-                cov_gyro = np.cov(data_gyro_array.T)
+                cov_gyro = np.absolute(np.cov(data_gyro_array.T))
 
                 self.save_calibration(offset_gyro, cov_gyro, 'gyro')
                 

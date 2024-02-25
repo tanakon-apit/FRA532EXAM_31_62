@@ -86,6 +86,6 @@ def generate_launch_description():
         joint_state_publisher,
         DiffDriveRobot,
         CommandOdom,
-        imuread_node,
+        # imuread_node,
         ekf_node,
     ])
