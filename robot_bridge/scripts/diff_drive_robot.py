@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from robot_bridge.mobile_kinematic import Diff_Drive_Kinematic
+from robot_bridge.mobile_cov_estimator import Diff_Drive_Cov_Estimator
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float64MultiArray
@@ -20,29 +21,27 @@ class DiffDriveRobot(Node):
         self.create_timer(0.033, self.timer_callback)
 
         self.Kine = Diff_Drive_Kinematic(r=0.03375, b=0.1625)
+        self.Cov = Diff_Drive_Cov_Estimator(kr=1.0, kl=1.0)
         self.qd = np.zeros(2)
         self.pose = np.zeros(3)
         self.twist = np.zeros(2)
         self.quat = quaternion_from_euler(0.0, 0.0, self.pose[2])
         self.lasttimestamp = self.get_clock().now()
+        self.r = 0.03375
 
-        self.twist_cov = np.array([1.0e-3, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                   0.0, 1.0e-3, 0.0, 0.0, 0.0, 0.0,
-                                   0.0, 0.0, 1.0e-6, 0.0, 0.0, 0.0,
-                                   0.0, 0.0, 0.0, 1.0e-3, 0.0, 0.0,
-                                   0.0, 0.0, 0.0, 0.0, 1.0e-3, 0.0,
-                                   0.0, 0.0, 0.0, 0.0, 0.0, 1.0e-1])
+        self.twist_cov = np.array([1.0e-9, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 1.0e-9, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 1.0e-9, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 1.0e-9, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 1.0e-9, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 0.0, 1.0e-9])
         
-        self.pose_cov = np.array([1.0e-3, 1.0e-3, 0.0, 0.0, 0.0, 0.0,
-                                   0.0, 1.0e-3, 0.0, 0.0, 0.0, 0.0,
-                                   0.0, 0.0, 1.0e-6, 0.0, 0.0, 0.0,
-                                   0.0, 0.0, 0.0, 1.0e-3, 0.0, 0.0,
-                                   0.0, 0.0, 0.0, 0.0, 1.0e-3, 0.0,
-                                   0.0, 0.0, 0.0, 0.0, 0.0, 1.0e-1])
-
-        #Test Wheel odom
-        # self.create_subscription(Twist, "/command", self.cmd_callback, 10)
-        # self.vel_cont = self.create_publisher(Float64MultiArray, "/qd", 10)
+        self.pose_cov = np.array([1.0e-9, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 1.0e-9, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 1.0e-9, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 1.0e-9, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 1.0e-9, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 0.0, 1.0e-9])
     
     def timer_callback(self):
         # calculate dt
@@ -52,23 +51,24 @@ class DiffDriveRobot(Node):
         # update odometry
         self.pose = self.Kine.get_pose(dt=dt, qd=self.qd)
         self.twist = self.Kine.get_twist(qd=self.qd)
+        # update covariance
+        cov = self.Cov.update_cov(theta=self.pose[2], dsr=self.qd[1]*dt*self.r, dsl=self.qd[0]*dt*self.r)
+        self.pose_cov[0] = cov[0][0]
+        self.pose_cov[1] = cov[0][1]
+        self.pose_cov[5] = cov[0][2]
+        self.pose_cov[6] = cov[1][0]
+        self.pose_cov[7] = cov[1][1]
+        self.pose_cov[11] = cov[1][2]
+        self.pose_cov[30] = cov[2][0]
+        self.pose_cov[31] = cov[2][1]
+        self.pose_cov[35] = cov[2][2]
         # calculate quaternion angle
         self.quat = quaternion_from_euler(0.0, 0.0, self.pose[2])
         # publish odometry and transformation
         self.pub_odometry()
         # self.pub_transformation()
-
-    # def cmd_callback(self, msg):
-    #     # subscribe cmd_vel and transform to wheel speed
-    #     qd = Float64MultiArray()
-    #     qd.data = self.Kine.get_wheelspeed(
-    #         [msg.linear.x,
-    #          msg.angular.z]).tolist()
         
-    #     #publish qd
-    #     self.vel_cont.publish(qd)
-        
-    def qd_callback(self, msg):
+    def qd_callback(self, msg : Float64MultiArray):
         self.qd = msg.data
 
     def pub_transformation(self):
