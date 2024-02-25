@@ -28,12 +28,12 @@ class DiffDriveRobot(Node):
         self.quat = quaternion_from_euler(0.0, 0.0, self.pose[2])
         self.lasttimestamp = self.get_clock().now()
 
-        self.twist_cov = np.array([1.0e-9, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                   0.0, 1.0e-9, 0.0, 0.0, 0.0, 0.0,
-                                   0.0, 0.0, 1.0e-9, 0.0, 0.0, 0.0,
-                                   0.0, 0.0, 0.0, 1.0e-9, 0.0, 0.0,
-                                   0.0, 0.0, 0.0, 0.0, 1.0e-9, 0.0,
-                                   0.0, 0.0, 0.0, 0.0, 0.0, 1.0e-9])
+        self.twist_cov = np.array([1.0e-5, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 1.0e-4, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 1.0e-7, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 1.0e-7, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 1.0e-7, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 0.0, 1.0e-7])
         
         self.pose_cov = np.array([1.0e-9, 0.0, 0.0, 0.0, 0.0, 0.0,
                                    0.0, 1.0e-9, 0.0, 0.0, 0.0, 0.0,
@@ -48,7 +48,7 @@ class DiffDriveRobot(Node):
         dt = (currenttimestamp - self.lasttimestamp).to_msg().nanosec * 1.0e-9
         self.lasttimestamp = currenttimestamp
         # update covariance
-        cov = self.Cov.update_cov(theta=self.pose[2], dqr=self.qd[1]*dt*self.r, dql=self.qd[0]*dt)
+        cov = self.Cov.update_cov(theta=self.pose[2], dqr=self.qd[1]*dt, dql=self.qd[0]*dt)
         self.pose_cov[0] = cov[0][0]
         self.pose_cov[1] = cov[0][1]
         self.pose_cov[5] = cov[0][2]

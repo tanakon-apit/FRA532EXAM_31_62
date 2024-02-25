@@ -6,7 +6,7 @@ class Diff_Drive_Cov_Estimator():
     def __init__(self, kr : float, kl : float, r : float, b : float):
         self.k = np.array([kr, 0.0,
                            0.0, kl]).reshape(2, 2)
-        self.p_cov = np.zeros([3, 3])
+        self.p_cov = np.eye(3) * 1.0e-9
         self.r = r
         self.b = b
         

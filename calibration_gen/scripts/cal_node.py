@@ -24,7 +24,7 @@ class CalibrationSensor(Node):
         self.collected_acc_data = []
 
         self.n = 0
-        self.num = 2000
+        self.num = 10000
 
         self.isCalibrated = False
 

@@ -84,8 +84,8 @@ def generate_launch_description():
         rviz, 
         robot_state_publisher,
         joint_state_publisher,
-        # DiffDriveRobot,
+        DiffDriveRobot,
         CommandOdom,
-        # imuread_node,
+        imuread_node,
         ekf_node,
     ])

@@ -51,7 +51,7 @@ class IMUSerialReader(Node):
         # Gyroscope data in rad/s
         self.imu_msg_cal .angular_velocity.x = msg.angular_velocity.x - self.value['offset gyro'][0]
         self.imu_msg_cal .angular_velocity.y = msg.angular_velocity.y - self.value['offset gyro'][1]
-        self.imu_msg_cal .angular_velocity.z = np.round(msg.angular_velocity.z - self.value['offset gyro'][2], 1)
+        self.imu_msg_cal .angular_velocity.z = np.round(msg.angular_velocity.z - self.value['offset gyro'][2], 2)
         
         # Accelerometer data in m/s^2
         self.imu_msg_cal .linear_acceleration.x = np.round(msg.linear_acceleration.x - self.value['offset acc'][0])
