@@ -12,8 +12,8 @@ class Diff_Drive_Cov_Estimator():
         ds = (dsr + dsl) / 2.0
         dtheta = (dsr - dsl) / 2.0
         s_cov = self.k
-        s_cov[0][0] *= dsr
-        s_cov[1][1] *= dsl
+        s_cov[0][0] *= np.abs(dsr)
+        s_cov[1][1] *= np.abs(dsl)
 
         a0 = np.cos(theta + (dtheta / 2.0))
         a1 = np.sin(theta + (dtheta / 2.0))
