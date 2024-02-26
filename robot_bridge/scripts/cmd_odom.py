@@ -8,6 +8,7 @@ from nav_msgs.msg import Odometry
 from tf2_ros import TransformBroadcaster
 import math
 from tf_transformations import quaternion_from_euler
+import numpy as np
 
 class CommandOdomNode(Node):
     def __init__(self):
@@ -21,7 +22,7 @@ class CommandOdomNode(Node):
         self.time_step = 0.033
         self.create_timer(self.time_step, self.timer_callback)
 
-        self.cmd_vel = [0.0, 0.0]
+        self.cmd_vel = [0.0, 0.0] #vx, vy, v_yaw
         self.cmd_pos = [0.0, 0.0, 0.0]
         self.quat = quaternion_from_euler(0.0, 0.0, self.cmd_pos[2])
         self.lasttimestamp = self.get_clock().now()
@@ -31,13 +32,14 @@ class CommandOdomNode(Node):
         self.cmd_vel_pub.publish(msg)
 
     def integrate(self, dt, cmd_vel, pos):
-        vx = cmd_vel[0] * math.cos(cmd_vel[1])
-        vy = cmd_vel[0] * math.sin(cmd_vel[1])
+        vel = [0.0, 0.0, 0.0]
+        vel[0] =  cmd_vel[0] #vx
+        vel[2] =  cmd_vel[1] #v_yaw
 
-        pos[0] = pos[0] + vx*dt
-        pos[1] = pos[1] + vy*dt
-        pos[2] = pos[2] + cmd_vel[1]*dt
-
+        Rr2g = np.array([np.cos(pos[2]), -np.sin(pos[2]), 0.0,
+                    np.sin(pos[2]), np.cos(pos[2]), 0.0,
+                    0.0, 0.0, 1.0]).reshape(3, 3)
+        pos = pos + (Rr2g @ vel) * dt
         return pos
 
     def timer_callback(self):
