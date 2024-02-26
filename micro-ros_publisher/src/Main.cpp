@@ -123,7 +123,7 @@ void loop0(void* pvParameters)
   {
     if (millis() >= timestamp)
     {
-      timestamp += 10;
+      timestamp += 20;
 
       if (xSemaphoreTake(cmd_sem, 0))
       {
@@ -141,13 +141,22 @@ void loop0(void* pvParameters)
       Motor.turnWheel(2, LEFT, round((0.916 * dir[1] * 1024) + (gain * fabs(speed[1]))));
 
       int motor_speed;
-      motor_speed = Motor.readSpeed(1);
+      for (int i = 0; i < 10; i++) {
+        motor_speed = Motor.readSpeed(1);
+        if (motor_speed >= 0) break;
+      }
       if (motor_speed >= 1024) wheel_speed[0] = 0.916 * (1024 - motor_speed) / gain;
       else if (motor_speed >= 0) wheel_speed[0] = 0.916 * motor_speed / gain;
+      // Serial.print(motor_speed);
 
-      motor_speed = Motor.readSpeed(2);
+      for (int i = 0; i < 10; i++) {
+        motor_speed = Motor.readSpeed(2);
+        if (motor_speed >= 0) break;
+      }
       if (motor_speed >= 1024) wheel_speed[1] = 0.916 * (motor_speed - 1024) / gain;
       else if (motor_speed >= 0) wheel_speed[1] = -0.916 * motor_speed / gain;
+      // Serial.print(' ');
+      // Serial.println(motor_speed);
 
       xSemaphoreGive(wheel_sem);
     }
