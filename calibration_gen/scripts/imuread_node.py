@@ -64,13 +64,13 @@ class IMUSerialReader(Node):
         self.imu_msg_cal .header.stamp = self.get_clock().now().to_msg()
         self.imu_msg_cal .header.frame_id = "imu"  # Adjust as needed
         # Gyroscope data in rad/s
-        gyro_x = np.round(msg.angular_velocity.x - self.value['offset gyro'][0], 2)
+        gyro_x = np.round(msg.angular_velocity.x - self.value['offset gyro'][0], 1)
         # if np.abs(gyro_x) < 0.01:
         #     gyro_x = 0.0
-        gyro_y = np.round(msg.angular_velocity.y - self.value['offset gyro'][1], 2)
+        gyro_y = np.round(msg.angular_velocity.y - self.value['offset gyro'][1], 1)
         # if np.abs(gyro_y) < 0.01:
         #     gyro_y = 0.0
-        gyro_z = np.round(msg.angular_velocity.z - self.value['offset gyro'][2], 2)
+        gyro_z = np.round(msg.angular_velocity.z - self.value['offset gyro'][2], 1)
         # if np.abs(gyro_z) < 0.01:
         #     gyro_z = 0.0
         self.imu_msg_cal .angular_velocity.x = gyro_x
