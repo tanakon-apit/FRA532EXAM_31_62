@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String, Bool
-import serial
 import serial.tools.list_ports
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import Quaternion, TransformStamped
@@ -12,6 +10,7 @@ from tf_transformations import quaternion_from_euler
 import os
 import sys, yaml
 from tf2_ros import TransformBroadcaster
+from calibration_gen.euler_angle_estimation import EulerAngle_Estimation
 
 class IMUSerialReader(Node):
     def __init__(self):
@@ -28,15 +27,16 @@ class IMUSerialReader(Node):
 
         self.isCalibrated = False
         
-        self.path = os.path.join('/home/tuchapong1234/FRA532EXAM_WS/src/calibration_gen', 'config', 'sensor_calibration.yaml')
+        self.path = os.path.join('/home/tanakon/FRA532EXAM_31_62_WS/src/calibration_gen', 'config', 'sensor_calibration.yaml')
         with open(self.path, 'r') as file:
             self.value = yaml.safe_load(file)
 
         self.imu_msg_cal = Imu()
         cov_gyro_np = np.array(self.value['cov gyro'])
-        # self.imu_msg_cal .angular_velocity_covariance = cov_gyro_np.flatten()
+        self.imu_msg_cal .angular_velocity_covariance = cov_gyro_np.flatten()
         cov_acc_np = np.array(self.value['cov acc'])
         self.imu_msg_cal .linear_acceleration_covariance = cov_acc_np.flatten()
+        self.imu_msg_cal.orientation_covariance = cov_gyro_np.flatten()
 
         self.quat = quaternion_from_euler(0.0, 0.0, 0.0)
         self.lasttimestamp = self.get_clock().now()
@@ -44,7 +44,7 @@ class IMUSerialReader(Node):
         self.imu_oreintation_x = 0.0
         self.imu_oreintation_y = 0.0
         self.imu_oreintation_z = 0.0
-
+        self.imu_oreintation = EulerAngle_Estimation()
 
         self.angle = 0.0
     
@@ -64,21 +64,21 @@ class IMUSerialReader(Node):
         self.imu_msg_cal .header.stamp = self.get_clock().now().to_msg()
         self.imu_msg_cal .header.frame_id = "imu"  # Adjust as needed
         # Gyroscope data in rad/s
-        self.imu_msg_cal .angular_velocity.x = msg.angular_velocity.x - self.value['offset gyro'][0]
-        self.imu_oreintation_x = self.integrate(self.imu_msg_cal .angular_velocity.x, self.imu_oreintation_x, dt)
-
-        self.imu_msg_cal .angular_velocity.y = msg.angular_velocity.y - self.value['offset gyro'][1]
-        self.imu_oreintation_y = self.integrate(self.imu_msg_cal .angular_velocity.y, self.imu_oreintation_y, dt)
-
-        gyro_z = msg.angular_velocity.z - self.value['offset gyro'][2]
-        if np.abs(gyro_z) < 0.01:
-            gyro_z = 0.0
-        # self.imu_msg_cal .angular_velocity.z = np.round(msg.angular_velocity.z - self.value['offset gyro'][2], 2)
+        gyro_x = np.round(msg.angular_velocity.x - self.value['offset gyro'][0], 2)
+        # if np.abs(gyro_x) < 0.01:
+        #     gyro_x = 0.0
+        gyro_y = np.round(msg.angular_velocity.y - self.value['offset gyro'][1], 2)
+        # if np.abs(gyro_y) < 0.01:
+        #     gyro_y = 0.0
+        gyro_z = np.round(msg.angular_velocity.z - self.value['offset gyro'][2], 2)
+        # if np.abs(gyro_z) < 0.01:
+        #     gyro_z = 0.0
+        self.imu_msg_cal .angular_velocity.x = gyro_x
+        self.imu_msg_cal .angular_velocity.y = gyro_y
         self.imu_msg_cal.angular_velocity.z = gyro_z
-        self.imu_oreintation_z = self.integrate(self.imu_msg_cal .angular_velocity.z, self.imu_oreintation_z, dt)
 
-        self.quat = quaternion_from_euler(self.imu_oreintation_x, self.imu_oreintation_y, self.imu_oreintation_z)
-
+        oreintation = self.imu_oreintation.compute_angle(gx=gyro_x, gy=gyro_y, gz=gyro_z, dt=dt)
+        self.quat = quaternion_from_euler(oreintation[0], oreintation[1], oreintation[2])
         self.imu_msg_cal.orientation = Quaternion(x=self.quat[0], y=self.quat[1], z=self.quat[2], w=self.quat[3])
 
         # Accelerometer data in m/s^2

@@ -78,10 +78,10 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time) {
       imu_msg.angular_velocity.y = gyro[1];
       imu_msg.angular_velocity.z = gyro[2];
 
-      imu_msg.orientation.x = quat[0];
-      imu_msg.orientation.y = quat[1];
-      imu_msg.orientation.z = quat[2];
-      imu_msg.orientation.w = quat[3];
+      // imu_msg.orientation.x = quat[0];
+      // imu_msg.orientation.y = quat[1];
+      // imu_msg.orientation.z = quat[2];
+      // imu_msg.orientation.w = quat[3];
     }
 
     if (xSemaphoreTake(wheel_sem, 0))
@@ -179,10 +179,10 @@ void loop0(void* pvParameters)
       gyro[1] = mpu.getGyroY() * deg2rad;
       gyro[2] = mpu.getGyroZ() * deg2rad;
 
-      quat[0] = mpu.getQuaternionX();
-      quat[1] = mpu.getQuaternionY();
-      quat[2] = mpu.getQuaternionZ();
-      quat[3] = mpu.getQuaternionW();
+      // quat[0] = mpu.getQuaternionX();
+      // quat[1] = mpu.getQuaternionY();
+      // quat[2] = mpu.getQuaternionZ();
+      // quat[3] = mpu.getQuaternionW();
 
       xSemaphoreGive(imu_sem);
     }
@@ -193,7 +193,7 @@ void loop1(void* pvParameters)
 {
 
   ///////////////////
-  IPAddress agent_ip(192,168,180,55);
+  IPAddress agent_ip(192,168,139,55);
   size_t agent_port = 8888;
 
   char ssid[] = "AndroidAP8A99";
