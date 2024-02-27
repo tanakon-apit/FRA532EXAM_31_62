@@ -47,6 +47,7 @@ MPU9250 mpu;
 double wheel_speed[2] = {0.0};
 double gyro[3] = {0.0};
 double accel[3] = {0.0};
+double quat[4] = {0.0};
 
 extern int clock_gettime(clockid_t unused, struct timespec *tp);
 
@@ -76,6 +77,11 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time) {
       imu_msg.angular_velocity.x = gyro[0];
       imu_msg.angular_velocity.y = gyro[1];
       imu_msg.angular_velocity.z = gyro[2];
+
+      imu_msg.orientation.x = quat[0];
+      imu_msg.orientation.y = quat[1];
+      imu_msg.orientation.z = quat[2];
+      imu_msg.orientation.w = quat[3];
     }
 
     if (xSemaphoreTake(wheel_sem, 0))
@@ -143,15 +149,17 @@ void loop0(void* pvParameters)
       int motor_speed;
       for (int i = 0; i < 10; i++) {
         motor_speed = Motor.readSpeed(1);
-        if (motor_speed >= 0) break;
+        if (motor_speed >= 0 && motor_speed <= 2047) break;
       }
       if (motor_speed >= 1024) wheel_speed[0] = 0.916 * (1024 - motor_speed) / gain;
       else if (motor_speed >= 0) wheel_speed[0] = 0.916 * motor_speed / gain;
+      // if (motor_speed >= 1024) wheel_speed[0] = (0.6 * 0.916 * (1024 - motor_speed) / gain) + (0.4 * wheel_speed[0]);
+      // else if (motor_speed >= 0) wheel_speed[0] = (0.6 * 0.916 * motor_speed / gain) + (0.4 * wheel_speed[0]);
       // Serial.print(motor_speed);
 
       for (int i = 0; i < 10; i++) {
         motor_speed = Motor.readSpeed(2);
-        if (motor_speed >= 0) break;
+        if (motor_speed >= 0 && motor_speed <= 2047) break;
       }
       if (motor_speed >= 1024) wheel_speed[1] = 0.916 * (motor_speed - 1024) / gain;
       else if (motor_speed >= 0) wheel_speed[1] = -0.916 * motor_speed / gain;
@@ -171,6 +179,11 @@ void loop0(void* pvParameters)
       gyro[1] = mpu.getGyroY() * deg2rad;
       gyro[2] = mpu.getGyroZ() * deg2rad;
 
+      quat[0] = mpu.getQuaternionX();
+      quat[1] = mpu.getQuaternionY();
+      quat[2] = mpu.getQuaternionZ();
+      quat[3] = mpu.getQuaternionW();
+
       xSemaphoreGive(imu_sem);
     }
   }
@@ -180,7 +193,7 @@ void loop1(void* pvParameters)
 {
 
   ///////////////////
-  IPAddress agent_ip(192,168,66,55);
+  IPAddress agent_ip(192,168,180,55);
   size_t agent_port = 8888;
 
   char ssid[] = "AndroidAP8A99";
