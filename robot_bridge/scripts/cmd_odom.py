@@ -13,8 +13,7 @@ import numpy as np
 class CommandOdomNode(Node):
     def __init__(self):
         super().__init__('Command_Odom')
-        self.create_subscription(Twist, "/command", self.cmd_callback, 10)
-        self.cmd_vel_pub = self.create_publisher(Twist, "cmd_vel", 10)
+        self.create_subscription(Twist, "/cmd_vel", self.cmd_callback, 10)
         self.cmd_pub = self.create_publisher(Odometry, "cmd", 10)
         # self.pub_odom = self.create_publisher(Odometry, "/odom", 10)
         self.pub_tf_br = TransformBroadcaster(self)
@@ -29,7 +28,6 @@ class CommandOdomNode(Node):
     
     def cmd_callback(self, msg):
         self.cmd_vel = [msg.linear.x, msg.angular.z]
-        self.cmd_vel_pub.publish(msg)
 
     def integrate(self, dt, cmd_vel, pos):
         vel = [0.0, 0.0, 0.0]
