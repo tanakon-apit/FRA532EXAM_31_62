@@ -74,7 +74,7 @@
         <joint name="imu" type="fixed">
             <parent link="tilt_link"/>
             <child link="imu"/>
-            <origin xyz="0.0 0 0" rpy="3.14159265359 0 0"/>
+            <origin xyz="0.0 0 0" rpy="0 0 0"/>
         </joint>
 
 
