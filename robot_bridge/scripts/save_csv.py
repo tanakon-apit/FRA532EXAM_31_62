@@ -7,11 +7,12 @@ import csv
 import os
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
+from std_msgs.msg import Float64MultiArray
 
 class CSVWritterNode(Node):
     def __init__(self):
         super().__init__('csv_writer_node')
-        self.create_subscription(Twist, "/cmd_vel", self.cmd_vel_callback, 10)
+        self.create_subscription(Float64MultiArray, "/wheel_vel", self.cmd_vel_callback, 10)
         self.create_subscription(Odometry, "/odom", self.odom_callback, 10)
         self.create_subscription(Odometry, "/odometry/filtered", self.odom_filter_callback, 10)
         self.create_subscription(Odometry, "/cmd", self.cmd_callback, 10)
@@ -46,23 +47,25 @@ class CSVWritterNode(Node):
         if self.cmd_vx == 0.0 and self.cmd_w == 0.0:
             print("Stop Record: Robot Stop")
         else:
+            print("Wheel Vel: ", self.cmd_vx, self.cmd_w)
             print("Record: ", self.cmd_x, self.cmd_y, self.odom_x, self.odom_y, self.odom_filter_x, self.odom_filter_y)
             # Check if all data is available
-            # if self.odom is not None and self.odom_filter is not None and self.cmd is not None:
-            # if self.odom is not None:
-            # Write data to CSV
-            with open(self.path, 'a') as csvfile:  # Use 'a' mode to append
-                csvwriter = csv.writer(csvfile)
-                csvwriter.writerow([self.cmd_x, self.cmd_y, self.odom_x, self.odom_y, self.odom_filter_x, self.odom_filter_y])
-            # Reset data
-            self.odom = None
-            self.odom_filter = None
-            self.cmd = None
+            if self.odom_x is not None and self.odom_filter_x is not None and self.odom_y is not None and self.odom_filter_y is not None: #and self.cmd_y is not None and self.cmd_x is not None:
+                # Write data to CSV
+                with open(self.path, 'a') as csvfile:  # Use 'a' mode to append
+                    csvwriter = csv.writer(csvfile)
+                    csvwriter.writerow([self.cmd_x, self.cmd_y, self.odom_x, self.odom_y, self.odom_filter_x, self.odom_filter_y])
+                # Reset data
+                self.odom_x = None
+                self.odom_y = None
+                self.odom_filter_x = None
+                self.odom_filter_y = None
+                self.cmd_x = None
+                self.cmd_y = None
 
-    def cmd_vel_callback(self, msg:Twist):
-        self.cmd_vx = msg.linear.x
-        print(self.cmd_vx)
-        self.cmd_w = msg.angular.z
+    def cmd_vel_callback(self, msg:Float64MultiArray):
+        self.cmd_vx = msg.data[0]
+        self.cmd_w = msg.data[1]
 
 
     def odom_callback(self, msg:Odometry):
