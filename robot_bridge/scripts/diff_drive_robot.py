@@ -21,7 +21,7 @@ class DiffDriveRobot(Node):
         self.create_timer(0.033, self.timer_callback)
 
         self.Kine = Diff_Drive_Kinematic(r=0.03375, b=0.1625)
-        self.Cov = Diff_Drive_Cov_Estimator(kr=1.0e-3, kl=1.0e-3, r=0.03375, b=0.1625)
+        self.Cov = Diff_Drive_Cov_Estimator(kr=1.0e-1, kl=1.0e-1, r=0.03375, b=0.1625)
         self.qd = np.zeros(2)
         self.pose = np.zeros(3)
         self.twist = np.zeros(2)
@@ -33,7 +33,7 @@ class DiffDriveRobot(Node):
                                    0.0, 0.0, 1.0e-6, 0.0, 0.0, 0.0,
                                    0.0, 0.0, 0.0, 1.0e-6, 0.0, 0.0,
                                    0.0, 0.0, 0.0, 0.0, 1.0e-6, 0.0,
-                                   0.0, 0.0, 0.0, 0.0, 0.0, 3.0e-3])
+                                   0.0, 0.0, 0.0, 0.0, 0.0, 1.0e-3])
         
         self.pose_cov = np.array([1.0e-9, 0.0, 0.0, 0.0, 0.0, 0.0,
                                    0.0, 1.0e-9, 0.0, 0.0, 0.0, 0.0,
@@ -57,7 +57,7 @@ class DiffDriveRobot(Node):
         self.pose_cov[11] = cov[1][2]
         self.pose_cov[30] = cov[2][0]
         self.pose_cov[31] = cov[2][1]
-        self.twist_cov[35] = cov[2][2]
+        self.pose_cov[35] = cov[2][2]
         print(cov)
         # update odometry
         self.pose = self.Kine.get_pose(dt=dt, qd=self.qd)
