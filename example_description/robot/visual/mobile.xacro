@@ -17,7 +17,7 @@
 
     <!-- Pure Visual (No dynamics) -->
     <xacro:macro name="manipulator_visual" params="">
-        <link name="base"/>
+        <link name="odom"/>
         <link name="base_link">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </link>
@@ -36,7 +36,7 @@
         <!-- <link name="end_effector"/> -->
 
         <joint name="base_offset" type="fixed">
-            <parent link="base"/>
+            <parent link="odom"/>
             <child link="base_link"/>
             <origin xyz="0 0 0.05775" rpy="0 0 0"/>
         </joint>

@@ -28,12 +28,12 @@ class DiffDriveRobot(Node):
         self.quat = quaternion_from_euler(0.0, 0.0, self.pose[2])
         self.lasttimestamp = self.get_clock().now()
 
-        self.twist_cov = np.array([1.0e-5, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                   0.0, 1.0e-4, 0.0, 0.0, 0.0, 0.0,
-                                   0.0, 0.0, 1.0e-7, 0.0, 0.0, 0.0,
-                                   0.0, 0.0, 0.0, 1.0e-7, 0.0, 0.0,
-                                   0.0, 0.0, 0.0, 0.0, 1.0e-7, 0.0,
-                                   0.0, 0.0, 0.0, 0.0, 0.0, 1.0e-7])
+        self.twist_cov = np.array([1.0e-6, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 1.0e-6, 0.0, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 1.0e-6, 0.0, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 1.0e-6, 0.0,
+                                   0.0, 0.0, 0.0, 0.0, 0.0, 3.0e-3])
         
         self.pose_cov = np.array([1.0e-9, 0.0, 0.0, 0.0, 0.0, 0.0,
                                    0.0, 1.0e-9, 0.0, 0.0, 0.0, 0.0,
@@ -66,7 +66,7 @@ class DiffDriveRobot(Node):
         self.quat = quaternion_from_euler(0.0, 0.0, self.pose[2])
         # publish odometry and transformation
         self.pub_odometry()
-        # self.pub_transformation()
+        self.pub_transformation()
         
     def qd_callback(self, msg : Float64MultiArray):
         self.qd = msg.data
@@ -75,7 +75,7 @@ class DiffDriveRobot(Node):
         tf_stamp = TransformStamped()
         tf_stamp.header.stamp = self.get_clock().now().to_msg()
         tf_stamp.header.frame_id = "odom"
-        tf_stamp.child_frame_id = "base_link"
+        tf_stamp.child_frame_id = "odom_base_link"
         tf_stamp.transform.translation.x = self.pose[0]
         tf_stamp.transform.translation.y = self.pose[1]
         tf_stamp.transform.rotation = Quaternion(x=self.quat[0], y=self.quat[1], z=self.quat[2], w=self.quat[3])
