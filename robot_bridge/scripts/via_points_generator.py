@@ -4,7 +4,7 @@ from lab1.dummy_module import dummy_function, dummy_var
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist, Quaternion, TransformStamped
-
+import numpy as np
 
 class ViaPointGenerateNode(Node):
     def __init__(self):
@@ -18,14 +18,26 @@ class ViaPointGenerateNode(Node):
         #              [0,-0.157],
         #              [0.2,0.0],]
 
-        self.via_point = [[0.1,0.0],
-                     [0.0,0.0],
-                     [-0.1,0.0],
-                     [0.0,0.0],]
+        # self.via_point = [[0.1,0.0],
+        #              [0.0,0.0],
+        #              [-0.1,0.0],
+        #              [0.0,0.0],]
+        
+        # self.time_stamp = [1.0,
+        #                    10.0,
+        #                    1.0,
+        #                    10.0]
+
+        self.via_point = [[0.0,0.1*np.pi/2.0],
+                          [0.0,0.0],
+                          [0.0,-0.1*np.pi/2.0],
+                          [0.0,0.0],
+                          [0.0,0.1*np.pi/2.0]]
         
         self.time_stamp = [1.0,
                            10.0,
                            1.0,
+                           20.0,
                            10.0]
         
         self.index = 0
