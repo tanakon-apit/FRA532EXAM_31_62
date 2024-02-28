@@ -18,15 +18,15 @@ class ViaPointGenerateNode(Node):
         #              [0,-0.157],
         #              [0.2,0.0],]
 
-        self.via_point = [[0.0,0.2],
-                     [0.2,0.0],
-                     [0.0,0.2],
-                     [0.2,0.0],]
+        self.via_point = [[0.1,0.0],
+                     [0.0,0.0],
+                     [-0.1,0.0],
+                     [0.0,0.0],]
         
-        self.time_stamp = [3.0,
-                           3.0,
-                           3.0,
-                           3.0]
+        self.time_stamp = [1.0,
+                           10.0,
+                           1.0,
+                           10.0]
         
         self.index = 0
         self.t = 0.0

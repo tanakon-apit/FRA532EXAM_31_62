@@ -30,7 +30,7 @@ class CSVWritterNode(Node):
         # name of csv file
         filename = "university_records.csv"
     
-        self.path = os.path.join('/home/tanakon/FRA532EXAM_31_62_WS', filename)
+        self.path = os.path.join('/home/tuchapong1234/FRA532EXAM_WS', filename)
 
         # field names
         fields = ['cmd_x', 'cmd_y', 'odom_x', 'odom_y', 'odom_filter_x', 'odom_filter_y']
