@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from lab1.dummy_module import dummy_function, dummy_var
+from robot_bridge.dummy_module import dummy_function, dummy_var
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist, Quaternion, TransformStamped
@@ -14,8 +14,7 @@ class CommandOdomNode(Node):
     def __init__(self):
         super().__init__('Command_Odom')
         self.create_subscription(Twist, "/cmd_vel", self.cmd_callback, 10)
-        self.cmd_pub = self.create_publisher(Odometry, "cmd", 10)
-        # self.pub_odom = self.create_publisher(Odometry, "/odom", 10)
+        self.pub_cmd_odom = self.create_publisher(Odometry, "/cmd", 10)
         self.pub_tf_br = TransformBroadcaster(self)
 
         self.time_step = 0.033
@@ -50,7 +49,7 @@ class CommandOdomNode(Node):
         # calculate quaternion angle
         self.quat = quaternion_from_euler(0.0, 0.0, self.cmd_pos[2])
         # publish odometry and transformation
-        # self.pub_odometry()
+        self.pub_odometry()
         self.pub_transformation()
 
     def pub_transformation(self):
@@ -73,7 +72,7 @@ class CommandOdomNode(Node):
         odom.pose.pose.orientation = Quaternion(x=self.quat[0], y=self.quat[1], z=self.quat[2], w=self.quat[3])
         odom.twist.twist.linear.x = self.cmd_vel[0]
         odom.twist.twist.angular.z = self.cmd_vel[1]
-        # self.pub_odom.publish(odom)
+        self.pub_cmd_odom.publish(odom)
     
 
 def main(args=None):

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from lab1.dummy_module import dummy_function, dummy_var
+from robot_bridge.dummy_module import dummy_function, dummy_var
 import rclpy
 from rclpy.node import Node
 import csv
@@ -30,7 +30,7 @@ class CSVWritterNode(Node):
         # name of csv file
         filename = "university_records.csv"
     
-        self.path = os.path.join('/home/tuchapong1234/FRA532EXAM_WS', filename)
+        self.path = os.path.join('/home/tanakon/FRA532EXAM_31_62_WS', filename)
 
         # field names
         fields = ['cmd_x', 'cmd_y', 'odom_x', 'odom_y', 'odom_filter_x', 'odom_filter_y']
@@ -50,7 +50,7 @@ class CSVWritterNode(Node):
             print("Wheel Vel: ", self.cmd_vx, self.cmd_w)
             print("Record: ", self.cmd_x, self.cmd_y, self.odom_x, self.odom_y, self.odom_filter_x, self.odom_filter_y)
             # Check if all data is available
-            if self.odom_x is not None and self.odom_filter_x is not None and self.odom_y is not None and self.odom_filter_y is not None: #and self.cmd_y is not None and self.cmd_x is not None:
+            if self.odom_x is not None and self.odom_filter_x is not None and self.odom_y is not None and self.odom_filter_y is not None and self.cmd_y is not None and self.cmd_x is not None:
                 # Write data to CSV
                 with open(self.path, 'a') as csvfile:  # Use 'a' mode to append
                     csvwriter = csv.writer(csvfile)
@@ -79,28 +79,6 @@ class CSVWritterNode(Node):
     def cmd_callback(self, msg:Odometry):
         self.cmd_x = msg.pose.pose.position.x
         self.cmd_y = msg.pose.pose.position.y
-
-
-        # # data rows of csv file
-        # rows = [['Nikhil', 'COE', '2', '9.0'],
-        #         ['Sanchit', 'COE', '2', '9.1'],
-        #         ['Aditya', 'IT', '2', '9.3'],
-        #         ['Sagar', 'SE', '1', '9.5'],
-        #         ['Prateek', 'MCE', '3', '7.8'],
-        #         ['Sahil', 'EP', '2', '9.1']]
-        
-
-        
-        # # writing to csv file
-        # with open(self.path, 'w') as csvfile:
-        #     # creating a csv writer object
-        #     csvwriter = csv.writer(csvfile)
-        #     # writing the fields
-        #     csvwriter.writerow(fields)
-        #     # writing the data rows
-        #     csvwriter.writerows(rows)
-
-
 
 def main(args=None):
     rclpy.init(args=args)

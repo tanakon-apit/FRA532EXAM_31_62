@@ -193,7 +193,7 @@ void loop1(void* pvParameters)
 {
 
   ///////////////////
-  IPAddress agent_ip(192,168,139,55);
+  IPAddress agent_ip(192,168,195,55);
   size_t agent_port = 8888;
 
   char ssid[] = "AndroidAP8A99";
