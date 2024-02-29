@@ -8,15 +8,6 @@ board_microros_transport = serial
 ros2 run micro_ros_agent micro_ros_agent udp4 --port 8888
 board_microros_transport = wifi
 
-// #if !defined(MICRO_ROS_TRANSPORT_ARDUINO_SERIAL)
-// #error This example is only avaliable for Arduino framework with serial transport.
-// #endif
-
-// set_microros_serial_transports(Serial);
-// delay(2000);
-
-## System Overview
-
 
 # FRA532 EXAM
 ## 1. Getting Started
@@ -37,6 +28,20 @@ source ~/.bashrc
 ```
 
 ## 1.2 Run Visualization Rviz.
+To start setup robot by run
+
+For Serial Mode
+
+```bash
+$ ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB0 -b 115200
+```
+
+For Wifi Mode
+
+```bash
+$ ros2 run micro_ros_agent micro_ros_agent udp4 --port 8888
+```
+
 To start Run Visualization you can run launch file
 
 ```bash
@@ -56,7 +61,7 @@ $ /bin/python3 ~FRA532EXAM_WS_31_62/src/robot_bridge/scripts/via_points_generato
 # 2. System overview
 ## 2.1 system_interface_diagram
 
-![image](https://github.com/tanakon-apit/FRA532EXAM_31_62/assets/113016544/13cde1c7-e85c-4291-8c45-0be18db5ed3a)
+![image](https://github.com/tanakon-apit/FRA532EXAM_31_62/assets/113016544/e4ee5e1c-c144-4a2c-a35d-411482d73e2a)
 
 ### Block Description
 
@@ -97,9 +102,11 @@ rqt_graph
 1) Rectangle
 
 ![alt text](image.png)
+
 2) Circle
 
 ![alt text](image-1.png)
+
 3) Half-circle
 
 ![alt text](image-2.png)
