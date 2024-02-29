@@ -14,3 +14,7 @@ board_microros_transport = wifi
 
 // set_microros_serial_transports(Serial);
 // delay(2000);
+
+## System Overview
+
+![image](https://github.com/tanakon-apit/FRA532EXAM_31_62/assets/113016544/13cde1c7-e85c-4291-8c45-0be18db5ed3a)
