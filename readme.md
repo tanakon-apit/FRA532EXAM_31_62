@@ -152,27 +152,100 @@ rqt_graph
 
 ### 5.2 Comparing Result between Standard VFF Algorithm & Modify VFF Algorithm
 
-### Condition 1: Evaluation in Condition of No Additional Obstacles
+### Condition 1: Moving Forward 1 m then Backward 1 m
 
-| Type       |  Testing Situation       |Standard VFF  | Modify VFF
-| :---: | :---:| :---: | :---:
-| Narrow    | Doorway  | Fail | Pass |
-| Wide  | Doorway  | Pass | Pass |
-| Narrow  | Pathways   | Fail | Pass |
-| Wide  | Pathways   | Pass | Pass |
-| Narrow  | Angles  | Fail | Pass |
-| Compact  | Spaces | Fail | Pass |
+| x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
+| :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
-### Condition 2: Evaluation in Condition of Additional Obstacles
+| x [rmse] | y [rmse] |
+| :---: | :---: |
+| 0 | 0 |
+| 0 | 0 |
 
-| Obstacle Object       |  Testing Situation      |Standard VFF  | Modify VFF
-| :---: | :---:| :---: | :---:
-| Cylindrical | middle of Pathways  | Fail | Fail |
-| Cube  | middle of Pathways  | Fail | Fail |
-| Cylindrical  | offset middle of Pathways  | Pass | Pass |
-| Cube  | offset middle of Pathways  | Pass | Pass |
-| Cylindrical  | corner  | Fail | Fail |
-| Cube | corner  | Fail | Fail |
+### Condition 2: Moving as a Rectangel 1 m^2 
+
+Odom 
+
+| x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
+| :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+| x [rmse] | y [rmse] |
+| :---: | :---: |
+| 0 | 0 |
+| 0 | 0 |  
+
+Odom + Gyro 
+
+cov: odom yaw [0.1]
+
+| x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
+| :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+| x [rmse] | y [rmse] |
+| :---: | :---: |
+| 0 | 0 |
+| 0 | 0 |  
+
+Odom + Gyro
+
+cov: odom yaw [1.00E-6]
+
+| x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
+| :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+| x [rmse] | y [rmse] |
+| :---: | :---: |
+| 0 | 0 |
+| 0 | 0 |  
+
+Odom + Gyro
+
+cov: odom yaw [1.00E-9]
+
+| x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
+| :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+| x [rmse] | y [rmse] |
+| :---: | :---: |
+| 0 | 0 |
+| 0 | 0 |  
+
+Odom + Gyro + Accel
+
+cov: odom x [1.00E-6] / odom yaw [0.1]
+
+| x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
+| :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+| x [rmse] | y [rmse] |
+| :---: | :---: |
+| 0 | 0 |
+| 0 | 0 |  
 
 ### Conclusion
 
