@@ -58,7 +58,6 @@ class DiffDriveRobot(Node):
         self.pose_cov[30] = cov[2][0]
         self.pose_cov[31] = cov[2][1]
         self.pose_cov[35] = cov[2][2]
-        print(cov)
         # update odometry
         self.pose = self.Kine.get_pose(dt=dt, qd=self.qd)
         self.twist = self.Kine.get_twist(qd=self.qd)
