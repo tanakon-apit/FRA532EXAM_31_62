@@ -243,6 +243,7 @@ cov: odom x [1.00E-6] / odom yaw [0.1]
 ### Conclusion
 
 From experiments, it has been found that the estimated values from the Extended Kalman Filter (EKF) currently have a relatively high error due to inaccuracies in estimating the heading of the robot. This arises from rounding gyro values to address drift issues in estimation. However, this simultaneously results in the robot's estimated heading being lower than it should be.
+
 A suggested approach to mitigate this issue is to employ a thresholding method, which can help alleviate the problem. Nonetheless, this would require adjusting the covariance values accordingly. Importantly, since most of the errors stem from the heading of the robot, using an IMU capable of estimating absolute heading can significantly improve the accuracy of the robot's estimation.
 
 
