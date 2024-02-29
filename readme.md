@@ -153,24 +153,22 @@ rqt_graph
 ### 5.2 Comparing Result between Standard VFF Algorithm & Modify VFF Algorithm
 
 ### Condition 1: Moving Forward 1 m then Backward 1 m
-
-| x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
+| x [actual] | y [actual] | x [estimated]| y [estimated]| x [error] | y [error] | x [square error] | y [square error] |
 | :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| -0.002 | -0.005 | -0.002 | -0.0325 | 0 | 0.0275 | 0.00075625 | 0.00075625 |
+| -0.003 | -0.004 | -0.0041 | -0.0081 | 0.0011 | 0.0041 | 0.00000121 | 0.00001681 |
+| -0.004 | -0.015 | -0.0045 | 0.0027 | 0.0005 | -0.0177 | 0.00000025 | 0.00031329 |
+| 0.005 | -0.005 | 0.0115 | 0.0306 | -0.0065 | -0.0356 | 0.00004225 | 0.00126736 |
+| -0.043 | -0.005 | -0.0454 | 0 | 0.0024 | -0.005 | 5.76E-06 | 0.000025 |
+| -0.02 | -0.005 | -0.023 | -0.023 | 0.003 | 0.018 | 0.000009 | 0.000324 |
+| 0.003 | -0.01 | -0.005 | -0.02 | 0.008 | 0.01 | 0.000064 | 0.0001 |
+| 0.04 | -0.009 | 0.03 | -0.028 | 0.01 | 0.019 | 0.0001 | 0.000361 |
+| 0.009 | -0.007 | 0.01 | -0.002 | -0.001 | -0.005 | 0.000001 | 0.000025 |
+| -0.033 | -0.007 | -0.032 | -0.0029 | -0.001 | -0.0041 | 0.000001 | 0.00001681 |
 
 | x [rmse] | y [rmse] |
 | :---: | :---: |
-| 0 | 0 |
-| 0 | 0 |
+| 0.004737827 | 0.017903966 |
 
 ### Condition 2: Moving as a Rectangel 1 m^2 
 
@@ -178,14 +176,13 @@ Odom
 
 | x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
 | :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| -0.054 | 0.032 | 0.063 | -0.086 | -0.117 | 0.118 | 0.013689 | 0.013924 |
+| -0.152 | 0.206 | -0.008 | 0.032 | -0.144 | 0.174 | 0.020736 | 0.030276 |
+| -0.106 | 0.211 | 0.123 | -0.137 | -0.229 | 0.348 | 0.052441 | 0.121104 |
 
 | x [rmse] | y [rmse] |
 | :---: | :---: |
-| 0 | 0 |
-| 0 | 0 |  
+| 0.170162667 | 0.234736732 |
 
 Odom + Gyro 
 
@@ -193,14 +190,13 @@ cov: odom yaw [0.1]
 
 | x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
 | :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| -0.041 | -0.012 | 0.155 | -0.176 | -0.196 | 0.164 | 0.038416 | 0.026896 |
+| -0.158 | 0.104 | -0.029 | -0.08 | -0.129 | 0.184 | 0.016641 | 0.033856 |
+| -0.095 | 0.235 | 0.092 | 0.111 | -0.187 | 0.124 | 0.034969 | 0.015376 |
 
 | x [rmse] | y [rmse] |
 | :---: | :---: |
-| 0 | 0 |
-| 0 | 0 |  
+| 0.173230097 | 0.159298462 |
 
 Odom + Gyro
 
@@ -208,14 +204,13 @@ cov: odom yaw [1.00E-6]
 
 | x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
 | :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| -0.16 | 0.05 | -0.038 | -0.125 | -0.122 | 0.175 | 0.014884 | 0.030625 |
+| 0.795 | 0.317 | 0.876 | 0.572 | -0.081 | -0.255 | 0.006561 | 0.065025 |
+| -0.135 | 0.084 | 6.00E-02 | -9.20E-02 | -0.195 | 0.176 | 0.038025 | 0.030976 |
 
 | x [rmse] | y [rmse] |
 | :---: | :---: |
-| 0 | 0 |
-| 0 | 0 |  
+| 0.14079536 | 0.14079536 |
 
 Odom + Gyro
 
@@ -223,14 +218,13 @@ cov: odom yaw [1.00E-9]
 
 | x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
 | :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| -0.063 | 0.114 | 1.62E-01 | -7.60E-02 | -0.225 | 0.19 | 0.050625 | 0.0361 |
+| -0.203 | 0.174 | -9.60E-02 | 4.30E-02 | -0.107 | 0.131 | 0.011449 | 0.017161 |
+| -0.043 | 0.099 | 1.04E-01 | -4.00E-02 | -0.147 | 0.139 | 0.021609 | 0.019321 |
 
 | x [rmse] | y [rmse] |
 | :---: | :---: |
-| 0 | 0 |
-| 0 | 0 |  
+| 0.167015967 | 0.155544206 |
 
 Odom + Gyro + Accel
 
@@ -238,18 +232,18 @@ cov: odom x [1.00E-6] / odom yaw [0.1]
 
 | x [actual] | y [actual] | x [estimated]| y_real [estimated]| x [error] | y [error] | x [square error] | y [square error]
 | :---: | :---:| :---: | :---: | :---: | :---:| :---: | :---: |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| -0.11 | 0.066 | 0.0077 | -0.056 | -0.1177 | 0.122 | 0.01385329 | 0.014884 |
+| -0.018 | -0.12 | 0.164 | -0.09 | -0.182 | -0.03 | 0.033124 | 0.0009 |
+| -0.115 | 0.307 | -0.002 | 0.086 | -0.113 | 0.221 | 0.012769 | 0.048841 |
 
 | x [rmse] | y [rmse] |
 | :---: | :---: |
-| 0 | 0 |
-| 0 | 0 |  
+| 0.141122039 | 0.146770796 |
 
 ### Conclusion
 
-From the experiments in case 1, which tested the capabilities of navigation in various points such as tight corners or narrow pathways, it was found that our Modified VFF performed better than the general VFF. This is because it can navigate well in narrow paths, including the ability to reverse out of tight corners, which the general VFF cannot do. As for case 2, both algorithms are able to avoid cylindrical obstacles well, except when they are positioned at the apex of a curve. This is because the repulsive force cannot counteract the attractive force. However, neither algorithm can avoid rectangular obstacles because the repulsive force is insufficient to prevent collisions during evasion maneuvers. The reason for not being able to increase the repulsive force is because it would hinder the robot from navigating narrow passages. Therefore, it can be concluded that the VFF algorithm is not suitable for narrow pathways.
+From experiments, it has been found that the estimated values from the Extended Kalman Filter (EKF) currently have a relatively high error due to inaccuracies in estimating the heading of the robot. This arises from rounding gyro values to address drift issues in estimation. However, this simultaneously results in the robot's estimated heading being lower than it should be.
+A suggested approach to mitigate this issue is to employ a thresholding method, which can help alleviate the problem. Nonetheless, this would require adjusting the covariance values accordingly. Importantly, since most of the errors stem from the heading of the robot, using an IMU capable of estimating absolute heading can significantly improve the accuracy of the robot's estimation.
 
 
 
